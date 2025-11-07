@@ -1,19 +1,30 @@
 import { useEffect, useState } from "react"
-import { MovieService, type MovieDTO } from "../services/moive.service"
+import { MovieCard } from "./movie-card";
+import { MovieService, type MovieDTO } from "../services/moive.service";
 
 export function MovieContent() {
 
-    const [movies, setMovies] = useState<MovieDTO[]>([])
+    const [movies, setMovies] = useState<MovieDTO[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        MovieService.list().then(result => {
+        setIsLoading(true);
+        MovieService.list().then((result) => {
             setMovies(result)
-        })
+        }).finally(() => setIsLoading(false))
     }, []);
 
     return (
-        <section className="bg-[#1c1c1c] p-8 grid grid-cols-[repeat(auto-fill, minmax(200px, 1fr))] gap-8 max-w-6xl x-auto">
-            <p>{JSON.stringify(movies)}</p>
-        </section>
+        isLoading ? (
+            <div className="bg-[#1c1c1c] flex justify-center items-center h-40">
+                <p className="text-2xl text-center text-white">Carregando...</p>
+            </div>
+        ) : (
+            <section className="bg-[#1c1c1c] py-12 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-8 max-w-6xl mx-auto">
+                {movies.map((movie, index) => (
+                    <MovieCard key={index} movie={movie} />
+                ))}
+            </section>
+        )
     )
 }
