@@ -6,11 +6,11 @@ export type MovieDTO = {
     image: string;
 }
 
-const _ENDPOINT = '/movies?key=344ceb20';
+const _ENDPOINT = '/movies?key=33c64070';
 
 export const MovieService = {
     async list(): Promise<MovieDTO[]> {
         const result = await api.get(_ENDPOINT);
-        return result.data;
+        return result.data
     }
 }
